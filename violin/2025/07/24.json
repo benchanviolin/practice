@@ -1,6 +1,8 @@
-{    
-  "minutes":30,
-  "notes":"Practiced Bach and Mendelssohn",
-  "todos":"Work on new Bach movement",
-  "highlights":"Bach Sonata 2 Andante is polishing"
-}
+[
+  {    
+    "minutes":30,
+    "notes":"Practiced Bach and Mendelssohn",
+    "todos":"Work on new Bach movement",
+    "highlights":"Bach Sonata 2 Andante is polishing"
+  }
+]
