@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["minutes"],
+    "properties": {
+      "minutes": { "type": "number" },
+      "notes": { "type": "string" },
+      "todos": { "type": "string" },
+      "highlights": { "type": "string" }
+    },
+    "additionalProperties": false
+  }
+}
