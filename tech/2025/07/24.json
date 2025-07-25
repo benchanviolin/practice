@@ -1,0 +1,8 @@
+[
+  {
+    "minutes":120,
+    "notes":"Learned about GitHub actions to validate JSON",
+    "todos":"Write JS to interpret logs and show XP/level up structure",
+    "highlights":"Got validation schema mostly working"
+  }
+]
