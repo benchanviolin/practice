@@ -3,16 +3,21 @@ name: Validate Changed JSON Files (01–31)
 on:
   pull_request:
     paths:
-      - '**/[0-3]?[0-9].json'
+      - '**/0[1-9].json'   # 01–09
+      - '**/[1-9].json'    # 1–9
+      - '**/1[0-9].json'   # 10–19
+      - '**/2[0-9].json'   # 20–29
+      - '**/3[01].json'    # 30–31
 
 jobs:
   validate:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout PR contents
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Needed to compare with base branch
+          fetch-depth: 0  # Required to diff against base
 
       - name: Install ajv-cli
         run: npm install -g ajv-cli
@@ -22,12 +27,11 @@ jobs:
         run: |
           git fetch origin ${{ github.base_ref }}
           git diff --name-only origin/${{ github.base_ref }}...HEAD > changed-files.txt
-          grep -E '/(0?[1-9]|[12][0-9]|3[01])\.json$' changed-files.txt || true
 
       - name: Validate changed JSON files
         run: |
           status=0
-          for file in $(grep -E '/(0?[1-9]|[12][0-9]|3[01])\.json$' changed-files.txt); do
+          grep -E '/(0?[1-9]|1[0-9]|2[0-9]|3[01])\.json$' changed-files.txt | while read file; do
             echo "Validating $file"
             if jq empty "$file" 2>/dev/null; then
               ajv validate -s validate.schema.json -d "$file" || status=1
