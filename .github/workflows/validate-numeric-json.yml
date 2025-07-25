@@ -9,15 +9,25 @@ on:
       - '**/2[0-9].json'   # 20–29
       - '**/3[01].json'    # 30–31
 
+  push:
+    branches:
+      - main
+    paths:
+      - '**/0[1-9].json'
+      - '**/[1-9].json'
+      - '**/1[0-9].json'
+      - '**/2[0-9].json'
+      - '**/3[01].json'
+
 jobs:
   validate:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout PR contents
+      - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Required to diff against base
+          fetch-depth: 0  # Required for diffing
 
       - name: Install ajv-cli
         run: npm install -g ajv-cli
@@ -25,8 +35,12 @@ jobs:
       - name: Get list of changed files
         id: changed
         run: |
-          git fetch origin ${{ github.base_ref }}
-          git diff --name-only origin/${{ github.base_ref }}...HEAD > changed-files.txt
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            git fetch origin ${{ github.base_ref }}
+            git diff --name-only origin/${{ github.base_ref }}...HEAD > changed-files.txt
+          else
+            git diff --name-only HEAD~1 > changed-files.txt
+          fi
 
       - name: Validate changed JSON files
         run: |
