@@ -1,32 +1,39 @@
-name: Validate Numeric JSON Files (01–31)
+name: Validate Changed JSON Files (01–31)
 
 on:
-  push:
-    paths:
-      - '**/0[1-9].json'
-      - '**/[1-9].json'
-      - '**/[12][0-9].json'
-      - '**/3[01].json'
   pull_request:
     paths:
-      - '**/0[1-9].json'
-      - '**/[1-9].json'
-      - '**/[12][0-9].json'
-      - '**/3[01].json'
+      - '**/[0-3]?[0-9].json'
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout PR contents
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Needed to compare with base branch
 
       - name: Install ajv-cli
         run: npm install -g ajv-cli
 
-      - name: Validate JSON files with numeric names (01–31)
+      - name: Get list of changed files
+        id: changed
         run: |
-          find . -regex '.*/\(0[1-9]\|[1-9]\|[12][0-9]\|3[01]\)\.json$' | while read file; do
+          git fetch origin ${{ github.base_ref }}
+          git diff --name-only origin/${{ github.base_ref }}...HEAD > changed-files.txt
+          grep -E '/(0?[1-9]|[12][0-9]|3[01])\.json$' changed-files.txt || true
+
+      - name: Validate changed JSON files
+        run: |
+          status=0
+          for file in $(grep -E '/(0?[1-9]|[12][0-9]|3[01])\.json$' changed-files.txt); do
             echo "Validating $file"
-            ajv validate -s validate.schema.json -d "$file"
+            if jq empty "$file" 2>/dev/null; then
+              ajv validate -s validate.schema.json -d "$file" || status=1
+            else
+              echo "❌ $file has invalid JSON syntax"
+              status=1
+            fi
           done
+          exit $status
