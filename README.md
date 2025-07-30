@@ -41,5 +41,5 @@ Track daily practice time with simple JSON entries and visualize progress.
 
 7. **View Your Progress**  
    - Visit [practice.benchantech.com](https://practice.benchantech.com).  
-   - Click **Update Settings** and fill in your information.  
+   - Click **Show Settings** and fill in your information.  
    - Click **Update** to see your minutes visualized in the graph.
