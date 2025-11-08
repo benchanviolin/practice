@@ -1,0 +1,14 @@
+[
+  {
+    "minutes":100,
+    "notes":"More polyglot test against GPT-5",
+    "todos":"Extract corrections and put them somewhere to review",
+    "highlights":"Focused on Spanish and French, a little Mandarin"
+  },
+  {
+    "minutes":40,
+    "notes":"Spoke with Chinese friend",
+    "todos":"Figure out how to parse 块/块儿 faster",
+    "highlights":"Mostly kept up with the conversation"
+  }
+]
